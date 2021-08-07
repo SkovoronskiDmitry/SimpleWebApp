@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet author="admin" id="the first changeSet">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="employee"/>
+            </not>
+        </preConditions>
+        <createTable tableName="employee">
+            <column autoIncrement="true" name="employee_id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="VARCHAR(20)"/>
+            <column name="last_name" type="VARCHAR(30)"/>
+            <column name="department_id" type="INT"/>
+            <column name="job_title" type="VARCHAR(30)"/>
+            <column name="gender" type="VARCHAR(6)"/>
+            <column name="date_of_birth" type="DATE"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

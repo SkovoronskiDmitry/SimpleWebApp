@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            }
+
+            td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+            }
+
+            tr:nth-child(even) {
+            background-color: #dddddd;
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <h2>SIMPLE APPLICATION</h2>
+
+        <table id="employeeList">
+        </table>
+
+        <form action="#">
+            <input id="first_name" placeholder="User name">
+            <input id="last_name" placeholder="User surname">
+            <input id="department_id" placeholder="Department">
+            <input id="job_title" placeholder="Job title">
+            <input id="gender" placeholder="Gender">
+            <input id="date_of_birth" placeholder="Date of birth">
+            <button onclick="createEmployee()">Create user</button>
+        </form>
+
+        <input id="search_field">
+        <button onclick="searchById()">Search employee by ID</button>
+
+        <input id="search_field_by_firstName">
+        <input id="search_field_by_lastName">
+        <button onclick="searchByFirstNameAndLastName()">Search employee by firstName and LastName</button>
+        <script>
+            function searchById() {
+            var employeeId = document.getElementById("search_field").value;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+            var employee = JSON.parse(this.responseText);
+            var html = '<tr>\n' +
+            '        <th>Employee Id</th>\n' +
+            '        <th>FirstName</th>\n' +
+            '        <th>LastName</th>\n' +
+            '        <th>Department ID</th>\n' +
+            '        <th>JobTitle</th>\n' +
+            '        <th>Gender</th>\n' +
+            '        <th>DateOfBirth</th>\n' +
+            '        <th>Delete</th>\n' +
+            '    </tr>';
+            html = html + '<tr><td>' + employee.employeeId + '</td>\n' +
+            '        <td>' + employee.firstName + '</td>\n' +
+            '        <td>' + employee.lastName + '</td>\n' +
+            '        <td>' + employee.departmentId + '</td>' +
+            '        <td>' + employee.jobTitle + '</td>' +
+            '        <td>' + employee.gender + '</td>' +
+            '        <td>' + employee.dateOfBirth + '</td>' +
+            '        <td><button onclick="deleteEmployee(' + employee.employeeId + ')">Delete</button></td></tr>';
+            document.getElementById("employeeList").innerHTML = html;
+            }
+            };
+            xhttp.open("GET", "http://localhost:8080/employees/" + employeeId, true);
+            xhttp.send();
+            }
+
+            <!--      function searchByFirstNameAndLastName() {-->
+            <!--        var firstName = document.getElementById-->
+            <!--        var lastName =-->
+            <!--        var employeeId = document.getElementById("search_field").value;-->
+            <!--        var xhttp = new XMLHttpRequest();-->
+            <!--        xhttp.onreadystatechange = function () {-->
+            <!--            if (this.readyState == 4 && this.status == 200) {-->
+            <!--                var employee = JSON.parse(this.responseText);-->
+            <!--                var html = '<tr>\n' +-->
+            <!--                    '        <th>Employee Id</th>\n' +-->
+            <!--                    '        <th>FirstName</th>\n' +-->
+            <!--                    '        <th>LastName</th>\n' +-->
+            <!--                    '        <th>Department ID</th>\n' +-->
+            <!--                    '        <th>JobTitle</th>\n' +-->
+            <!--                    '        <th>Gender</th>\n' +-->
+            <!--                    '        <th>DateOfBirth</th>\n' +-->
+            <!--                    '        <th>Delete</th>\n' +-->
+            <!--                    '    </tr>';-->
+            <!--                html = html + '<tr><td>' + employee.employeeId + '</td>\n' +-->
+            <!--                    '        <td>' + employee.firstName + '</td>\n' +-->
+            <!--                    '        <td>' + employee.lastName + '</td>\n' +-->
+            <!--                    '        <td>' + employee.departmentId + '</td>' +-->
+            <!--                    '        <td>' + employee.jobTitle + '</td>' +-->
+            <!--                    '        <td>' + employee.gender + '</td>' +-->
+            <!--                    '        <td>' + employee.dateOfBirth + '</td>' +-->
+            <!--                    '        <td><button onclick="deleteEmployee(' + employee.employeeId + ')">Delete</button></td></tr>';-->
+            <!--                document.getElementById("employeeList").innerHTML = html;-->
+            <!--            }-->
+            <!--        };-->
+            <!--        xhttp.open("GET", "http://localhost:8080/employees/" + firstName + "/"+ lastName, true);-->
+            <!--        xhttp.send();-->
+            <!--    }-->
+
+            function deleteEmployee(employeeId) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("DELETE", "http://localhost:8080/employees/" + employeeId, true);
+            xhttp.send();
+            }
+
+            function createEmployee() {
+            var employeeFirstName = document.getElementById("first_name").value;
+            var employeeLastName = document.getElementById("last_name").value;
+            var employeeDepartmentId = document.getElementById("department_id").value;
+            var employeeJobTitle= document.getElementById("job_title").value;
+            var employeeGender = document.getElementById("gender").value;
+            var employeeDateOfBirth = document.getElementById("date_of_birth").value;
+
+            var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+            xmlhttp.open("POST", "http://localhost:8080/employees");
+            xmlhttp.setRequestHeader("Content-Type", "application/json");
+            xmlhttp.send(JSON.stringify({firstName: employeeFirstName, lastName: employeeLastName, departmentId: employeeDepartmentId, jobTitle:employeeJobTitle, gender:employeeGender, dateOfBirth:employeeDateOfBirth}));
+            loadEmployees();
+            }
+
+            function loadEmployees() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+            var employees = JSON.parse(this.responseText);
+            var html = '<tr>\n' +
+            '        <th>Employee Id</th>\n' +
+            '        <th>FirstName</th>\n' +
+            '        <th>LastName</th>\n' +
+            '        <th>Department ID</th>\n' +
+            '        <th>JobTitle</th>\n' +
+            '        <th>Gender</th>\n' +
+            '        <th>DateOfBirth</th>\n' +
+            '        <th>Delete</th>\n' +
+            '    </tr>';
+            for (var i = 0; i < employees.length; i++) {
+            var employee = employees[i];
+            console.log(employee);
+            html = html + '<tr><td>' + employee.employeeId + '</td>\n' +
+            '        <td>' + employee.firstName + '</td>\n' +
+            '        <td>' + employee.lastName + '</td>\n' +
+            '        <td>' + employee.departmentId + '</td>' +
+            '        <td>' + employee.jobTitle + '</td>' +
+            '        <td>' + employee.gender + '</td>' +
+            '        <td>' + employee.dateOfBirth + '</td>' +
+            '        <td><button onclick="deleteEmployee(' + employee.employeeId + ')">Delete</button></td></tr>';
+
+            }
+            document.getElementById("employeeList").innerHTML = html;
+            }
+            };
+            xhttp.open("GET", "http://localhost:8080/employees", true);
+            xhttp.send();
+            }
+
+            loadEmployees();
+
+        </script>
+    </body>
+</html>
