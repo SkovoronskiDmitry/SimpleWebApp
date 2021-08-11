@@ -13,18 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.Optional;
 
 @Api(value = "Employees")
 @RestController
 @RequestMapping(value = "/employees")
 public class EmployeeController {
-
-//    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-//    public String findAll() {
-//
-//        return "employeeService.findAll()";
-//
-//    }
 
     private final static Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
 
@@ -81,7 +75,28 @@ public class EmployeeController {
                 orElseThrow(() -> new EmployeeServiceNotFoundException(employeeId.toString()));
     }
 
-
+    @ApiOperation(
+            value = "Find employee by firstName and lastName",
+            response = Employee.class,
+            authorizations = {
+                    @Authorization(
+                            value = "Employee",
+                            scopes = {@AuthorizationScope(scope = "find:employee", description = "find employee by firstName and lastName")}
+                    )})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Everything is working"),
+            @ApiResponse(code = 400, message = "Bad Request — The request was invalid or cannot be served. The exact error should be explained in the error payload. E.g. „The JSON is not valid"),
+            @ApiResponse(code = 500, message = "Internal Server Error — API developers should avoid this error. If an error occurs in the global catch blog, the stacktrace should be logged and not returned as response")
+    })
+    @GetMapping(value = "/{firstName}/{lastName}")
+    public Collection<Employee> findByFirstNameAndLastName(
+            @ApiParam(value = "firstName for search employee", required = true)
+            @PathVariable final String firstName,
+            @ApiParam(value = "lastName for search employee", required = true)
+            @PathVariable final String lastName) throws EmployeeServiceException {
+        LOGGER.info("IN: Find Employee with firstName: {}, lastName: {}", firstName, lastName);
+        return employeeService.findByFirstNameAndLastName(firstName, lastName);
+    }
 
     @ApiOperation(
             value = "Create new Employee",
@@ -94,6 +109,7 @@ public class EmployeeController {
     )
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Everything is working"),
+            @ApiResponse(code = 201, message = "Employee was created"),
             @ApiResponse(code = 400, message = "Bad Request — The request was invalid or cannot be served. The exact error should be explained in the error payload. E.g. „The JSON is not valid"),
             @ApiResponse(code = 500, message = "Internal Server Error — API developers should avoid this error. If an error occurs in the global catch blog, the stacktrace should be logged and not returned as response")
     })
@@ -120,12 +136,11 @@ public class EmployeeController {
             @ApiResponse(code = 500, message = "Internal Server Error — API developers should avoid this error. If an error occurs in the global catch blog, the stacktrace should be logged and not returned as response")
     })
     @PutMapping(value = "/{employeeId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void updateEmployee(
+    public Optional<Employee> updateEmployee(
             @ApiParam(value = "Employee for update", required = true)
-            @RequestBody final Long employeeId) throws EmployeeServiceException {
+            @PathVariable final Long employeeId, @RequestBody final Employee employee) throws EmployeeServiceException {
         LOGGER.info("IN: Update Employee with ID: {}", employeeId);
-        employeeService.updateEmployee(employeeId);
-        LOGGER.info("OUT: Employee with ID: {} was successfully update", employeeId);
+        return employeeService.updateEmployee(employeeId, employee);
     }
 
     @ApiOperation(value = "Delete Employee by ID",

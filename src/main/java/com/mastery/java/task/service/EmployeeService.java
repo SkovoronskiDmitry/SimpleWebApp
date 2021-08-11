@@ -35,13 +35,14 @@ public class EmployeeService {
         return employeeDao.save(employee);
     }
 
-    public void updateEmployee(final Long employeeId) throws EmployeeServiceException {
-        Optional<Employee> optionalEmployee = employeeDao.findById(employeeId);
-        optionalEmployee.map(newEmployee -> {
-                    newEmployee.setJobTitle(optionalEmployee.get().getJobTitle());
-                    newEmployee.setDepartmentId(optionalEmployee.get().getDepartmentId());
-                    return employeeDao.save(newEmployee);
-                });
+    public Optional<Employee> updateEmployee(final Long employeeId, final Employee employee) throws EmployeeServiceException {
+        return employeeDao.findById(employeeId).map(newEmployee -> {
+            newEmployee.setFirstName(employee.getFirstName());
+            newEmployee.setLastName(employee.getLastName());
+            newEmployee.setJobTitle(employee.getJobTitle());
+            newEmployee.setDepartmentId(employee.getDepartmentId());
+            return employeeDao.save(newEmployee);
+        });
     }
 
     public void deleteEmployee(final Long employeeId) throws EmployeeServiceException {
