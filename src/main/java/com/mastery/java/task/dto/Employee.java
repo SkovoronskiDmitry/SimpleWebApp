@@ -5,11 +5,11 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.*;
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -29,8 +29,9 @@ public class Employee {
     private String firstName;
     @NotEmpty(message = "The LastName value can't be empty")
     private String lastName;
+    @Enumerated(EnumType.STRING)
     @NotNull(message = "The Gender value can't be empty")
-    private String gender;
+    private Gender gender;
     @Positive(message = "Only positive number")
     @NotNull(message = "The Department ID value can't be null")
     private Long departmentId;
@@ -42,7 +43,7 @@ public class Employee {
     public Employee(
             final String firstName,
             final String lastName,
-            final String gender,
+            final Gender gender,
             final Long departmentId,
             final String jobTitle,
             final LocalDate dateOfBirth
@@ -83,11 +84,11 @@ public class Employee {
     }
 
     @ApiModelProperty(value = "Gender identity", allowableValues = "MALE, FEMALE", required = true, position = 5)
-    public String getGender() {
-        return gender.toString();
+    public Gender getGender() {
+        return gender;
     }
 
-    public void setGender(final String gender) {
+    public void setGender(final Gender gender) {
         this.gender = gender;
     }
 
