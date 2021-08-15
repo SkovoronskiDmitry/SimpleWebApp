@@ -3,20 +3,30 @@ package com.mastery.java.task.service;
 import com.mastery.java.task.dao.EmployeeDao;
 import com.mastery.java.task.dto.Employee;
 import com.mastery.java.task.service.exception.EmployeeServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.jms.Message;
+import javax.jms.ObjectMessage;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class EmployeeService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeService.class);
+
     private final EmployeeDao employeeDao;
 
+    private final JmsTemplate jmsTemplate;
+
     @Autowired
-    public EmployeeService(EmployeeDao employeeDao) {
+    public EmployeeService(EmployeeDao employeeDao, JmsTemplate jmsTemplate) {
         this.employeeDao = employeeDao;
+        this.jmsTemplate = jmsTemplate;
     }
 
     public List<Employee> findAll() throws EmployeeServiceException {
@@ -47,5 +57,25 @@ public class EmployeeService {
 
     public void deleteEmployee(final Long employeeId) throws EmployeeServiceException {
         employeeDao.deleteById(employeeId);
+    }
+
+    public void sendMessage(String destinationName, Employee employee) {
+        try {
+            LOGGER.info("Send message to : " + destinationName);
+            jmsTemplate.convertAndSend(destinationName, employee);
+        } catch (Exception ex) {
+            LOGGER.error("Exception during send Message: ", ex);
+        }
+    }
+
+    public void onMessage(Message message) {
+        try {
+            ObjectMessage objectMessage = (ObjectMessage) message;
+            Employee employee = (Employee) objectMessage.getObject();
+            createEmployee(employee);
+            LOGGER.info("Received Message: " + employee.toString());
+        } catch (Exception ex) {
+            LOGGER.error("Received Exception : " + ex);
+        }
     }
 }
