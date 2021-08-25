@@ -7,7 +7,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-class EmployeeServiceTest {
+public class EmployeeServiceTest {
 
     private static Employee employeeForTest = new Employee(
             "Alex",
@@ -46,11 +46,6 @@ class EmployeeServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-    }
-
-    @After
-    public void tearDown() {
-        verifyNoInteractions(employeeRepository);
     }
 
     @Test

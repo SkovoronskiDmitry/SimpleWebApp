@@ -8,7 +8,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-class CustomGlobalExceptionHandlerTest {
+public class CustomGlobalExceptionHandlerTest {
 
     private static final Date DATE = new Date();
 
@@ -39,13 +39,8 @@ class CustomGlobalExceptionHandlerTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @After
-    public void tearDown() {
-        verifyNoInteractions(dateTimeService);
-    }
-
     @Test
-    void handleEmployeeServiceNotFoundException() {
+    public void handleEmployeeServiceNotFoundException() {
         //given
         final EmployeeServiceNotFoundException employeeServiceNotFoundException = new EmployeeServiceNotFoundException("1");
         when(dateTimeService.getCurrentDate()).thenReturn(DATE);
@@ -62,7 +57,7 @@ class CustomGlobalExceptionHandlerTest {
     }
 
     @Test
-    void handleEmployeeServiceException() {
+    public void handleEmployeeServiceException() {
         //given
         final RuntimeException runtimeException = new RuntimeException();
         final EmployeeServiceException employeeServiceException = new EmployeeServiceException("Massage exception", runtimeException);
@@ -80,7 +75,7 @@ class CustomGlobalExceptionHandlerTest {
     }
 
     @Test
-    void uncaughtException() {
+    public void uncaughtException() {
         //given
         final Throwable throwable = new Throwable();
         when(dateTimeService.getCurrentDate()).thenReturn(DATE);

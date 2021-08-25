@@ -65,11 +65,11 @@
             <artifactId>spring-boot-starter-activemq</artifactId>
             <version>${spring-boot-starter}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.apache.activemq</groupId>-->
-<!--            <artifactId>activemq-broker</artifactId>-->
-<!--            <version>5.16.0</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.activemq</groupId>-->
+        <!--            <artifactId>activemq-broker</artifactId>-->
+        <!--            <version>5.16.0</version>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -113,11 +113,12 @@
             <version>${swagger.version}</version>
         </dependency>
 
-<!--        TEST-->
+        <!--        TEST-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot-starter}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -154,13 +155,13 @@
                 <configuration>
                     <archive>
                         <manifest>
+                            <addClasspath>true</addClasspath>
                             <mainClass>com.mastery.java.task.SimpleWebApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin><plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><configuration><source>8</source><target>8</target></configuration></plugin>
+            </plugin>
         </plugins>
     </build>
-
 
 </project>

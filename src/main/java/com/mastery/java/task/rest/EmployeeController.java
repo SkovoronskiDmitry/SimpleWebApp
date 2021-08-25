@@ -86,7 +86,7 @@ public class EmployeeController {
             @ApiResponse(code = 400, message = "Bad Request — The request was invalid or cannot be served. The exact error should be explained in the error payload. E.g. „The JSON is not valid"),
             @ApiResponse(code = 500, message = "Internal Server Error — API developers should avoid this error. If an error occurs in the global catch blog, the stacktrace should be logged and not returned as response")
     })
-    @GetMapping(value = "/{firstName}/{lastName}")
+    @PostMapping(value = "/{firstName}/{lastName}")
     public Collection<Employee> findByFirstNameAndLastName(
             @ApiParam(value = "firstName for search employee", required = true)
             @PathVariable final String firstName,
