@@ -6,6 +6,7 @@ import com.mastery.java.task.service.exception.EmployeeServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,9 @@ public class EmployeeService {
     private final EmployeeDao employeeDao;
 
     private final JmsTemplate jmsTemplate;
+
+    @Value("${activemq.destinationName}")
+    private String destinationName;
 
     @Autowired
     public EmployeeService(EmployeeDao employeeDao, JmsTemplate jmsTemplate) {
@@ -59,7 +63,7 @@ public class EmployeeService {
         employeeDao.deleteById(employeeId);
     }
 
-    public void sendMessage(String destinationName, Employee employee) {
+    public void sendMessage(Employee employee) {
         try {
             LOGGER.info("Send message to : " + destinationName);
             jmsTemplate.convertAndSend(destinationName, employee);

@@ -19,9 +19,6 @@ public class JmsController {
         this.employeeService = employeeService;
     }
 
-    @Value("${activemq.destinationName}")
-    private String destinationName;
-
     @ApiOperation(value = "Send message with employee",
             authorizations = {
                     @Authorization(
@@ -34,6 +31,6 @@ public class JmsController {
     })
     @PostMapping(value = "/jms", produces = MediaType.APPLICATION_JSON_VALUE)
     public void sendMessage(@RequestBody Employee employee) {
-        employeeService.sendMessage(destinationName, employee);
+        employeeService.sendMessage(employee);
     }
 }

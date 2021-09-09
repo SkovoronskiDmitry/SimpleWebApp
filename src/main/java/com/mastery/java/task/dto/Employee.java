@@ -1,5 +1,6 @@
 package com.mastery.java.task.dto;
 
+import com.mastery.java.task.dto.annatation.EighteenYearsOld;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,7 @@ public class Employee {
     private Long departmentId;
     @NotEmpty(message = "The Job Title value can't be empty")
     private String jobTitle;
-    @Past(message = "Only past time")
+    @EighteenYearsOld
     private LocalDate dateOfBirth;
 
     public Employee(
