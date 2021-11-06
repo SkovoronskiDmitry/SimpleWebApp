@@ -4,10 +4,9 @@ import com.mastery.java.task.dao.EmployeeDao;
 import com.mastery.java.task.dto.Employee;
 import com.mastery.java.task.service.exception.EmployeeServiceException;
 import org.hamcrest.CoreMatchers;
-import org.junit.After;
+import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -24,18 +23,20 @@ import java.util.Optional;
 import static com.mastery.java.task.dto.Gender.MALE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EmployeeServiceTest {
 
-    private static Employee employeeForTest = new Employee(
-            "Alex",
-            "Poll",
-            MALE,
-            8L,
-            "assistance",
-            LocalDate.now());
+    private static Employee employeeForTest = Employee.builder()
+            .firstName("Alex")
+            .lastName("Poll")
+            .gender(MALE)
+            .departmentId(8L)
+            .jobTitle("assistance")
+            .dateOfBirth(LocalDate.ofYearDay(1989, 245))
+            .build();
 
     @InjectMocks
     private EmployeeService employeeService;
@@ -119,12 +120,16 @@ public class EmployeeServiceTest {
     @Test
     public void shouldUpdateEmployee() throws EmployeeServiceException {
         // given
-        Employee employeeForUpdate = new Employee("Alex",
-                "Poll",
-                MALE,
-                69L,
-                "boss",
-                LocalDate.now());
+        Employee employeeForUpdate =
+                Employee.builder()
+                        .firstName("Alex")
+                        .lastName("Poll")
+                        .gender(MALE)
+                        .departmentId(69L)
+                        .jobTitle("boss")
+                        .dateOfBirth(LocalDate.ofYearDay(1989, 245))
+                        .build();
+
         employeeForUpdate.setEmployeeId(1L);
         when(employeeRepository.findById(any(Long.class))
                 .map(employeeForTest -> {

@@ -5,10 +5,9 @@ import com.mastery.java.task.service.datetime.DateTimeService;
 import com.mastery.java.task.service.exception.EmployeeServiceException;
 import com.mastery.java.task.service.exception.EmployeeServiceNotFoundException;
 import org.hamcrest.CoreMatchers;
-import org.junit.After;
+import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -21,7 +20,6 @@ import java.util.Collections;
 import java.util.Date;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
